@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body>
+  <body class="custom-gradient pt-5">
     <!-- Navbar -->
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
       <div class="container-fluid">
-        <a class="navbar-brand text-dark" href="#">LaTIENDA</a>
+        <a class="navbar-brand text-dark" href="#"
+          ><img
+            src="./assets/logo2.png"
+            alt="Logo"
+            class="d-inline-block align-text-top"
+            style="width: 70px; height: auto"
+        /></a>
         <button
           class="navbar-toggler"
           type="button"
@@ -25,7 +31,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active text-dark" aria-current="page" href="#"
+              <a class="nav-link active text-white" aria-current="page" href="#"
                 >Imprescindibles</a
               >
             </li>
@@ -38,13 +44,6 @@
             <li class="nav-item">
               <a class="nav-link text-dark" href="#">Familia</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Precios</a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li>
           </ul>
           <form class="d-flex" role="search">
             <input
@@ -53,12 +52,17 @@
               placeholder="Search"
               aria-label="Search"
             />
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
+            <button class="btn btn-dark" type="submit">Search</button>
           </form>
         </div>
       </div>
     </nav>
+
+    <div class="container mt-5">
+      <h1 class="text-center mb-5 text-dark">
+        Lo Más Popular Hasta El Momento
+      </h1>
+      <div class="row list-cards"></div>
+    </div>
   </body>
 </html>
