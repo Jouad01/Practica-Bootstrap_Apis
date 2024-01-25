@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 export const getPopularMovies = async (page) => {
   const moviesUrl = `${URL_PATH}/3/movie/popular?api_key=${API_KEY}&language=es-ES&page=${page}`;
   const genresUrl = `${URL_PATH}/3/genre/movie/list?api_key=${API_KEY}&language=es-ES`;
+  // const ratedUrl = `${URL_PATH}/3/movie/top_rated?api_key=${API_KEY}&language=es-ES&page=${page}`;
 
   const [moviesResponse, genresResponse] = await Promise.all([
     fetch(moviesUrl).then(response => response.json()),
@@ -75,3 +76,4 @@ export const renderPopularMovies = async (page) => {
   });
   document.getElementsByClassName("list-cards")[0].innerHTML = html;
 };
+
