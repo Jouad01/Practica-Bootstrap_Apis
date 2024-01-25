@@ -1,0 +1,24 @@
+#carouselExampleCaptions {
+    width: 100%;
+    margin: 0 auto;
+}
+
+#carouselExampleCaptions img {
+    width: 100%;
+    height: auto;
+    max-height: 700px;
+}
+
+.trailer-button {
+    /* background-color: transparent; */
+    color: white;
+    border: 3px solid white;
+    padding: 10px 30px;
+    text-decoration: none;
+    /* transition: all 0.5s ease; */
+}
+
+.trailer-button:hover {
+    background-color: white;
+    color: black;
+}
