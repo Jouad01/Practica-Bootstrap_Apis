@@ -1,71 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flick Pick | Acción, Comedia, Cartoon y más</title>
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
 
-  <body class="custom-gradient pt-5">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
-      <div class="container-fluid">
-        <a class="navbar-brand text-dark" href="#"
-          ><img
-            src="./assets/logo.png"
-            alt="Logo"
-            class="d-inline-block align-text-top"
-            style="width: 70px; height: auto"
-        /></a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flick Pick | Acción, Comedia, Cartoon y más</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- <style>
+    #puzzle-piece {
+      width: 80px;
+      height: 80px;
+      background-color: blue;
+      cursor: grab;
+      position: absolute;
+    }
+
+    #drop-zone {
+      width: 100px;
+      height: 100px;
+      border: 1px dashed black;
+      margin-top: 20px;
+    }
+  </style> -->
+</head>
+
+
+<body class="custom-gradient pt-5">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand text-dark" href="#"><img src="./assets/logo.png" alt="Logo"
+          class="d-inline-block align-text-top" style="width: 70px; height: auto" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active text-white" aria-current="page" href="#">Imprescindibles</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="#">Películas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="#">Series</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="#">Familia</a>
+          </li>
+        </ul>
+        <button id="btnOpenModal" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#locationModal">
+          Busca tu ubicación
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active text-white" aria-current="page" href="#"
-                >Imprescindibles</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Películas</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Series</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Familia</a>
-            </li>
-          </ul>
-          <button
-            id="btnOpenModal"
-            class="btn btn-dark"
-            data-bs-toggle="modal"
-            data-bs-target="#locationModal"
-          >
-            Busca tu ubicación
-          </button>
-          <form class="d-flex mx-3" role="search">
-            <input
-              class="form-control me-2 bg-body-secondary"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-dark" type="submit">Search</button>
-          </form>
-        </div>
+        <form class="d-flex mx-3" role="search">
+          <input class="form-control me-2 bg-body-secondary" type="search" placeholder="Search" aria-label="Search" />
+          <button class="btn btn-dark" type="submit">Search</button>
+        </form>
       </div>
-    </nav>
+    </div>
+  </nav>
 
     <!-- DIV CARRUSEL -->
     <div id="carouselExampleCaptions" class="carousel slide">
