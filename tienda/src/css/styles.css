@@ -1,24 +1,84 @@
 #carouselExampleCaptions {
-    width: 100%;
-    margin: 0 auto;
+  width: 100%;
+  margin: 0 auto;
 }
 
 #carouselExampleCaptions img {
-    width: 100%;
-    height: auto;
-    max-height: 700px;
+  width: 100%;
+  height: auto;
+  max-height: 700px;
 }
 
 .trailer-button {
-    /* background-color: transparent; */
-    color: white;
-    border: 3px solid white;
-    padding: 10px 30px;
-    text-decoration: none;
-    /* transition: all 0.5s ease; */
+  /* background-color: transparent; */
+  color: white;
+  border: 3px solid white;
+  padding: 10px 30px;
+  text-decoration: none;
+  /* transition: all 0.5s ease; */
 }
 
 .trailer-button:hover {
-    background-color: white;
-    color: black;
+  background-color: white;
+  color: black;
+}
+
+/* Drag and drop */
+
+.info {
+  position: relative;
+  font-family: Arial;
+  margin: 10px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+#rest2 {
+  font-size: 13px;
+}
+
+#text div {
+  position: relative;
+  height: 200px;
+  width: 200px;
+  border: 1px dashed gray;
+  display: inline-block;
+  margin: 0;
+}
+
+#images {
+  width: 100%;
+}
+
+#drag4 {
+  height: 200px;
+  width: 200px;
+
+  display: inline-block;
+}
+
+#drag4 {
+  background: linear-gradient(to bottom right, #16244c, #324165, #656b83);
+}
+.modal-header,
+.modal-title {
+  color: black;
+}
+.modal-body {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#text div,
+#images {
+  flex: 0 0 49%;
+  text-align: center;
+}
+
+#text div {
+  border: 1px dashed gray;
+  height: 200px;
+  margin: 0;
 }

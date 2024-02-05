@@ -75,10 +75,11 @@
           <img src="assets/film1.jpg" class="d-block w-100" alt="..." />
           <div class="carousel-caption d-none d-md-block">
             <a
-              href="https://www.youtube.com/watch?v=zh4KhVSMwtQ&ab_channel=WarnerBros.PicturesLatinoam%C3%A9rica"
-              target="_blank"
+              href="javascript:void(0);"
               class="trailer-button"
-              data-bs-toggle="tooltip"
+              data-bs-toggle="modal"
+              data-bs-target="#miModal"
+              data-trailer-url="https://www.youtube.com/watch?v=zh4KhVSMwtQ&ab_channel=WarnerBros.PicturesLatinoam%C3%A9rica"
               data-bs-placement="top"
               title="Ver tráiler"
             >
@@ -91,10 +92,11 @@
           <img src="assets/film2.jpg" class="d-block w-100" alt="..." />
           <div class="carousel-caption d-none d-md-block">
             <a
-              href="https://www.youtube.com/watch?v=_1f2RLdxQfA&ab_channel=UniversalSpain"
-              target="_blank"
+              href="javascript:void(0);"
               class="trailer-button"
-              data-bs-toggle="tooltip"
+              data-bs-toggle="modal"
+              data-bs-target="#miModal"
+              data-trailer-url="https://www.youtube.com/watch?v=_1f2RLdxQfA&ab_channel=UniversalSpain"
               data-bs-placement="top"
               title="Ver tráiler"
             >
@@ -107,10 +109,11 @@
           <img src="assets/film3.jpeg" class="d-block w-100" alt="..." />
           <div class="carousel-caption d-none d-md-block">
             <a
-              href="https://www.youtube.com/watch?v=-17IRU3jQm4&ab_channel=WarnerBros.PicturesEspa%C3%B1a"
-              target="_blank"
+              href="javascript:void(0);"
               class="trailer-button"
-              data-bs-toggle="tooltip"
+              data-bs-toggle="modal"
+              data-bs-target="#miModal"
+              data-trailer-url="https://www.youtube.com/watch?v=-17IRU3jQm4&ab_channel=WarnerBros.PicturesEspa%C3%B1a"
               data-bs-placement="top"
               title="Ver tráiler"
             >
@@ -175,9 +178,52 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal Drag and Drop -->
+
+    <div
+      class="modal fade"
+      id="miModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">
+              Comprobación de seguridad
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="images">
+              <div id="drag4" draggable="true" ondragstart="drag(event)"></div>
+            </div>
+
+            <div id="text">
+              <div
+                id="div1"
+                ondrop="drop(event)"
+                ondragover="allowDrop(event)"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGW5NIuXNMmQqfrhv4QuSm8pU3aEYhje0&callback=initMap&v=weekly"
       defer
     ></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="js/apidragdrop.js"></script>
   </body>
 </html>
