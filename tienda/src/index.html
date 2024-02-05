@@ -67,101 +67,162 @@
       </div>
     </nav>
 
-<!-- DIV CARRUSEL -->
-<div id="carouselExampleCaptions" class="carousel slide">
-  <div class="carousel-inner my-3">
-    <div class="carousel-item active">
-      <img src="assets/film1.jpg" class="d-block w-100" alt="..." />
-      <div class="carousel-caption d-none d-md-block">
-        <a class="openModalButton trailer-button" title="Ver tráiler" target="_blank" data-bs-toggle="tooltip"
-          data-bs-placement="top"
-          data-trailer-url="https://www.youtube.com/watch?v=zh4KhVSMwtQ&ab_channel=WarnerBros.PicturesLatinoam%C3%A9rica">
-          VER TRÁILER
-        </a>
-      </div>
-    </div>
-
-    <div class="carousel-item">
-      <img src="assets/film2.jpg" class="d-block w-100" alt="..." />
-      <div class="carousel-caption d-none d-md-block">
-        <a class="openModalButton trailer-button" title="Ver tráiler" target="_blank" data-bs-toggle="tooltip"
-          data-bs-placement="top"
-          data-trailer-url="https://www.youtube.com/watch?v=_1f2RLdxQfA&ab_channel=UniversalSpain">
-          VER TRÁILER
-        </a>
-      </div>
-    </div>
-
-    <div class="carousel-item">
-      <img src="assets/film3.jpeg" class="d-block w-100" alt="..." />
-      <div class="carousel-caption d-none d-md-block">
-        <a class="openModalButton trailer-button" title="Ver tráiler" target="_blank" data-bs-toggle="tooltip"
-          data-bs-placement="top"
-          data-trailer-url="https://www.youtube.com/watch?v=-17IRU3jQm4&ab_channel=WarnerBros.PicturesEspa%C3%B1a">
-          VER TRÁILER
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-    <!-- Modal -->
-    <div class="modal" id="puzzleModal">
-      <div class="modal-content">
-        <span class="close" id="closeModalButton">×</span>
-        <div id="puzzle-piece"></div>
-        <div id="drop-zone"></div>
-      </div>
-    </div>
-
-
-    <!-- BOTONES CARRUSEL -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-
-  <!-- CONTENEDOR PELICULAS -->
-  <div class="container mt-5">
-    <h1 class="text-center mb-5 text-dark">
-      Lo Más Popular Hasta El Momento
-    </h1>
-    <div class="row list-cards"></div>
-  </div>
-
-  <!--Modal mapa-->
-  <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalLabel">Busca tu Ubicación</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- DIV CARRUSEL -->
+    <div id="carouselExampleCaptions" class="carousel slide">
+      <div class="carousel-inner my-3">
+        <div class="carousel-item active">
+          <img src="assets/film1.jpg" class="d-block w-100" alt="..." />
+          <div class="carousel-caption d-none d-md-block">
+            <a
+              href="javascript:void(0);"
+              class="trailer-button"
+              data-bs-toggle="modal"
+              data-bs-target="#miModal"
+              data-trailer-url="https://www.youtube.com/watch?v=zh4KhVSMwtQ&ab_channel=WarnerBros.PicturesLatinoam%C3%A9rica"
+              data-bs-placement="top"
+              title="Ver tráiler"
+            >
+              VER TRÁILER
+            </a>
+          </div>
         </div>
-        <div class="modal-body">
-          <div id="map" style="height: 400px"></div>
-          <!-- Aquí irá el mapa -->
+
+        <div class="carousel-item">
+          <img src="assets/film2.jpg" class="d-block w-100" alt="..." />
+          <div class="carousel-caption d-none d-md-block">
+            <a
+              href="javascript:void(0);"
+              class="trailer-button"
+              data-bs-toggle="modal"
+              data-bs-target="#miModal"
+              data-trailer-url="https://www.youtube.com/watch?v=_1f2RLdxQfA&ab_channel=UniversalSpain"
+              data-bs-placement="top"
+              title="Ver tráiler"
+            >
+              VER TRÁILER
+            </a>
+          </div>
+        </div>
+
+        <div class="carousel-item">
+          <img src="assets/film3.jpeg" class="d-block w-100" alt="..." />
+          <div class="carousel-caption d-none d-md-block">
+            <a
+              href="javascript:void(0);"
+              class="trailer-button"
+              data-bs-toggle="modal"
+              data-bs-target="#miModal"
+              data-trailer-url="https://www.youtube.com/watch?v=-17IRU3jQm4&ab_channel=WarnerBros.PicturesEspa%C3%B1a"
+              data-bs-placement="top"
+              title="Ver tráiler"
+            >
+              VER TRÁILER
+            </a>
+          </div>
         </div>
       </div>
+
+      <!-- BOTONES CARRUSEL -->
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
-  </div>
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGW5NIuXNMmQqfrhv4QuSm8pU3aEYhje0&callback=initMap&v=weekly"
-    defer></script>
-  <div id="puzzle-piece" class="draggable"></div>
-  <div id="drop-zone"></div>
 
-  <script>
+    <!-- CONTENEDOR PELICULAS -->
+    <div class="container mt-5">
+      <h1 class="text-center mb-5 text-dark">
+        Lo Más Popular Hasta El Momento
+      </h1>
+      <div class="row list-cards"></div>
+    </div>
 
-  </script>
-  <script src="js/apidragdrop.js"></script>
+    <!--Modal mapa-->
+    <div
+      class="modal fade"
+      id="locationModal"
+      tabindex="-1"
+      aria-labelledby="modalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Busca tu Ubicación</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="map" style="height: 400px"></div>
+            <!-- Aquí irá el mapa -->
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- Modal Drag and Drop -->
 
-</body>
+    <div
+      class="modal fade"
+      id="miModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">
+              Comprobación de seguridad
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="images">
+              <div id="drag4" draggable="true" ondragstart="drag(event)"></div>
+            </div>
 
+            <div id="text">
+              <div
+                id="div1"
+                ondrop="drop(event)"
+                ondragover="allowDrop(event)"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGW5NIuXNMmQqfrhv4QuSm8pU3aEYhje0&callback=initMap&v=weekly"
+      defer
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="js/apidragdrop.js"></script>
+  </body>
 </html>
