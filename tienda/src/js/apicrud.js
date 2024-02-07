@@ -62,8 +62,29 @@ const API_KEY = "a8cf93c6f0b9e3d858ab64d82c2a51ab";
 
 document.addEventListener("DOMContentLoaded", () => {
     renderPopularMovies(1);
-});
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        var searchValue = this.value.toLowerCase();
+        var tableRows = document.querySelectorAll("#moviesTable tbody tr");
 
+        // Desplazamiento automático hacia la tabla de películas
+        if (searchValue.length > 0) {
+            document.getElementById("moviesTable").scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }
+
+        // Filtrado de las filas de la tabla según la búsqueda
+        tableRows.forEach(function (row) {
+            var titleText = row.cells[0].textContent.toLowerCase();
+            if (titleText.indexOf(searchValue) > -1) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+});
 const getPopularMovies = async (page) => {
     const moviesUrl = `${URL_PATH}/3/movie/popular?api_key=${API_KEY}&language=es-ES&page=${page}`;
     return fetch(moviesUrl)
@@ -79,7 +100,7 @@ function renderPagination(currentPage, totalPages) {
 
     // las páginas que se mostrarán
     let startPage = 1;
-    let endPage = Math.min(startPage + 2, totalPages); //  solo 3 páginas a partir de la página actual
+    let endPage = Math.min(startPage + 3, totalPages); //  solo 3 páginas a partir de la página actual
 
     for (let i = startPage; i <= endPage; i++) {
         let button = document.createElement('button');
