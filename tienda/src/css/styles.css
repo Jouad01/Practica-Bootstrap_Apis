@@ -19,58 +19,6 @@
 }
 
 .trailer-button:hover {
-<<<<<<< HEAD
-    background-color: white;
-    color: black;
-}
-
-
-
-/* DRAG AND DROP */
-
-.modal-content {
-  position: relative; /* hacer que el modal sea un contenedor de posicionamiento */
-  background-color: #fefefe;
-  margin: 10% auto; 
-  padding: 80px;
-  border: 2px solid #888;
-  display: flex; 
-  justify-content: center; /* Centra  elementos */
-  max-width: 900px;;
-}
-
-.close {
-  color: #aaa;
-  font-size: 50px; 
-  font-weight: bold;
-  position: absolute; /* esto para posicionar la 'x' */
-  top: 10px; 
-  left: 10px; 
-}
-
-  #puzzle-piece {
-    display: none; 
-    width: 80px;
-    height: 80px;
-    background-color: blue;
-    position: absolute;
-    left: 20%;
-  }
-
-
-
-  #drop-zone {
-    display: none; /* Añade esto para ocultar el hueco inicialmente */
-    width: 85px;
-    height: 85px;
-    border: 2px dashed black;
-    position: absolute;
-    right: 30%;
-  }
-  
-.modal-header {
-  margin-bottom: 70px; /* esto para separar el título del área de arrastrar y soltar */
-=======
   background-color: white;
   color: black;
 }
@@ -133,5 +81,4 @@
   border: 1px dashed gray;
   height: 200px;
   margin: 0;
->>>>>>> d0cc269 (drag and drop version completa)
 }

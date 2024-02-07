@@ -109,4 +109,4 @@ function resetDragAndDrop() {
     originalContainer.appendChild(dragItem);
   }
 }
->>>>>>> d0cc269 (drag and drop version completa)
+
