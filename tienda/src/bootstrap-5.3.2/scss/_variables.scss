@@ -739,7 +739,7 @@ $table-cell-padding-x-sm:     .25rem !default;
 $table-cell-vertical-align:   top !default;
 
 $table-color:                 var(--#{$prefix}emphasis-color) !default;
-$table-bg:                    var(--#{$prefix}body-bg) !default;
+$table-bg:                    #2B3C61 !default;
 $table-accent-bg:             transparent !default;
 
 $table-th-font-weight:        null !default;
@@ -777,8 +777,8 @@ $table-variants: (
   "success":    shift-color($success, $table-bg-scale),
   "info":       shift-color($info, $table-bg-scale),
   "warning":    shift-color($warning, $table-bg-scale),
-  "danger":     shift-color($danger, $table-bg-scale),
-  "light":      $light,
+  "danger":     #ffffff,
+  "light":      #0F2579,
   "dark":       $dark,
 ) !default;
 // scss-docs-end table-loop
