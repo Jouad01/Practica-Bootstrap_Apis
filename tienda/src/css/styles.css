@@ -117,19 +117,19 @@
 .modal-title {
   color: black;
 }
-.modal-body {
+#miModal .modal-body {
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
 
-#text div,
-#images {
+#miModal #text div,
+#miModal #images {
   flex: 0 0 49%;
   text-align: center;
 }
 
-#text div {
+#miModal #text div {
   border: 1px dashed gray;
   height: 200px;
   margin: 0;
