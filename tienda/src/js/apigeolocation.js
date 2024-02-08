@@ -1,6 +1,20 @@
 let map, infoWindow;
 let lastLocation = null; // Variable para almacenar la última ubicación
 
+// FUNCION PARA MOSTRAR EL SPINNER Y ABRIR EL MODAL
+window.showSpinnerAndOpenModal = function () {
+  const btnOpenModal = document.getElementById("btnOpenModal");
+  const spinnerIcon = document.getElementById("spinnerIcon");
+  spinnerIcon.classList.remove("d-none");
+  btnOpenModal.disabled = true;
+  setTimeout(() => {
+    spinnerIcon.classList.add("d-none");
+    btnOpenModal.disabled = false;
+    $('#locationModal').modal('show');
+    initMap();
+  }, 2000);
+};
+
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: -34.397, lng: 150.644 },
@@ -112,3 +126,4 @@ export {
   openModal,
   closeModal,
 };
+

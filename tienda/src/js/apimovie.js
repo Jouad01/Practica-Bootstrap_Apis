@@ -99,3 +99,5 @@ export const renderPopularMovies = async (page) => {
   }
   document.getElementsByClassName("list-cards")[0].innerHTML = html;
 };
+// para paginacion
+window.renderPopularMovies = renderPopularMovies;

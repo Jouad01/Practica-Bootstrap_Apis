@@ -65,46 +65,39 @@ function loadWishlist() {
   const request = store.getAll();
 
   request.onsuccess = function () {
-    const wishlist = document.getElementById("wishlist");
-    wishlist.innerHTML = "";
+    const wishlistTable = document.getElementById("wishlist");
+    wishlistTable.innerHTML = "";
 
     request.result.forEach((movie) => {
-      const item = document.createElement("li");
-      item.className =
-        "list-group-item d-flex justify-content-between align-items-center";
+      const row = wishlistTable.insertRow();
 
-      const titleSpan = document.createElement("span");
-      titleSpan.textContent = movie.title;
+      // Celda para el título
+      const titleCell = row.insertCell(0);
+      titleCell.textContent = movie.title;
 
-      const radioAlta = document.createElement("input");
-      radioAlta.type = "radio";
-      radioAlta.name = "priority-" + movie.id;
-      radioAlta.value = "Alta";
-      radioAlta.checked = movie.priority === "Alta";
-      const labelAlta = document.createElement("label");
-      labelAlta.textContent = "Ver Ahora";
+      // Celda para el nivel de prioridad
+      const priorityCell = row.insertCell(1);
+      const prioritySelect = document.createElement("select");
+      prioritySelect.innerHTML = `
+        <option value="Alta" ${movie.priority === "Alta" ? "selected" : ""}>Alta</option>
+        <option value="Baja" ${movie.priority === "Baja" ? "selected" : ""}>Baja</option>
+      `;
+      prioritySelect.onchange = () => updateMoviePriority(movie.id, prioritySelect.value);
+      priorityCell.appendChild(prioritySelect);
 
-      const radioBaja = document.createElement("input");
-      radioBaja.type = "radio";
-      radioBaja.name = "priority-" + movie.id;
-      radioBaja.value = "Baja";
-      radioBaja.checked =
-        movie.priority === "Baja" || movie.priority === undefined; // Por defecto a Baja si no está definido
-      const labelBaja = document.createElement("label");
-      labelBaja.textContent = "Ver Más Tarde";
-
-      radioAlta.onchange = () => updateMoviePriority(movie.id, "Alta");
-      radioBaja.onchange = () => updateMoviePriority(movie.id, "Baja");
-
-      item.appendChild(titleSpan);
-      item.appendChild(radioAlta);
-      item.appendChild(labelAlta);
-      item.appendChild(radioBaja);
-      item.appendChild(labelBaja);
-      wishlist.appendChild(item);
+      // Celda para las acciones
+      const actionsCell = row.insertCell(2);
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Eliminar";
+      deleteButton.className = "btn btn-danger";
+      deleteButton.onclick = () => removeFromWishlist(movie.id);
+      actionsCell.appendChild(deleteButton);
     });
   };
 }
+
+
+
 
 function updateMoviePriority(id, priority) {
   const transaction = db.transaction(["wishlist"], "readwrite");
