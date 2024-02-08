@@ -1,269 +1,176 @@
 let db;
-const request = indexedDB.open("MyDatabase", 3);
 
-request.onerror = function (event) {
-    console.log("Error al abrir la base de datos", event);
-};
+document.addEventListener("DOMContentLoaded", function () {
+  initDb();
+});
 
-request.onsuccess = function (event) {
-    db = event.target.result;
-};
+function initDb() {
+  const request = window.indexedDB.open("MoviesDB", 1);
 
-request.onupgradeneeded = function (event) {
+  request.onerror = function (event) {
+    console.error("Error al abrir la base de datos:", event.target.errorCode);
+  };
+
+  request.onupgradeneeded = function (event) {
     db = event.target.result;
     if (!db.objectStoreNames.contains("wishlist")) {
-        db.createObjectStore("wishlist", { keyPath: "id" });
+      const objectStore = db.createObjectStore("wishlist", {
+        keyPath: "id",
+      });
+      objectStore.createIndex("watchNow", "watchNow", { unique: false });
     }
-};
+  };
 
-
-
-function addMovieToWishlist(movie) {
-    const transaction = db.transaction(["wishlist"], "readwrite");
-    const objectStore = transaction.objectStore("wishlist");
-    objectStore.add(movie);
+  request.onsuccess = function (event) {
+    db = event.target.result;
+    loadWishlist();
+  };
 }
 
-function updatePriorityInWishlist(id, nuevaPrioridad) {
-    const transaction = db.transaction(["wishlist"], "readwrite");
-    const objectStore = transaction.objectStore("wishlist");
+function addToWishlist(movie) {
+  const transaction = db.transaction(["wishlist"], "readwrite");
+  const store = transaction.objectStore("wishlist");
+  store.add(movie).onsuccess = function () {
+    console.log("Película añadida a la lista de deseos");
+    loadWishlist();
+  };
+}
 
-    const getRequest = objectStore.get(id);
+function removeFromWishlist(id) {
+  const transaction = db.transaction(["wishlist"], "readwrite");
+  const store = transaction.objectStore("wishlist");
+  store.delete(id).onsuccess = function () {
+    loadWishlist();
+  };
+}
 
-    getRequest.onsuccess = function (event) {
-        const movie = event.target.result;
+function updateMoviePriority(id, watchNow) {
+  const transaction = db.transaction(["wishlist"], "readwrite");
+  const store = transaction.objectStore("wishlist");
+  const request = store.get(id);
 
-        if (movie) {
-            movie.prioridad = nuevaPrioridad;
-            objectStore.put(movie);
-        }
+  request.onsuccess = function () {
+    const movie = request.result;
+    movie.watchNow = watchNow;
+    store.put(movie).onsuccess = function () {
+      console.log("Prioridad de visualización actualizada");
+      loadWishlist(); // Recargar la lista para reflejar el cambio
     };
+  };
 }
 
+function loadWishlist() {
+  const transaction = db.transaction(["wishlist"], "readonly");
+  const store = transaction.objectStore("wishlist");
+  const request = store.getAll();
 
-function getWishlistMovies(callback) {
-    const transaction = db.transaction(["wishlist"], "readonly");
-    const objectStore = transaction.objectStore("wishlist");
-    const request = objectStore.getAll();
-    request.onsuccess = function (event) {
-        callback(event.target.result);
+  request.onsuccess = function () {
+    const wishlist = document.getElementById("wishlist");
+    wishlist.innerHTML = "";
+
+    request.result.forEach((movie) => {
+      const item = document.createElement("li");
+      item.className =
+        "list-group-item d-flex justify-content-between align-items-center";
+
+      const titleSpan = document.createElement("span");
+      titleSpan.textContent = movie.title;
+
+      const radioAlta = document.createElement("input");
+      radioAlta.type = "radio";
+      radioAlta.name = "priority-" + movie.id;
+      radioAlta.value = "Alta";
+      radioAlta.checked = movie.priority === "Alta";
+      const labelAlta = document.createElement("label");
+      labelAlta.textContent = "Ver Ahora";
+
+      const radioBaja = document.createElement("input");
+      radioBaja.type = "radio";
+      radioBaja.name = "priority-" + movie.id;
+      radioBaja.value = "Baja";
+      radioBaja.checked =
+        movie.priority === "Baja" || movie.priority === undefined; // Por defecto a Baja si no está definido
+      const labelBaja = document.createElement("label");
+      labelBaja.textContent = "Ver Más Tarde";
+
+      radioAlta.onchange = () => updateMoviePriority(movie.id, "Alta");
+      radioBaja.onchange = () => updateMoviePriority(movie.id, "Baja");
+
+      item.appendChild(titleSpan);
+      item.appendChild(radioAlta);
+      item.appendChild(labelAlta);
+      item.appendChild(radioBaja);
+      item.appendChild(labelBaja);
+      wishlist.appendChild(item);
+    });
+  };
+}
+
+function updateMoviePriority(id, priority) {
+  const transaction = db.transaction(["wishlist"], "readwrite");
+  const store = transaction.objectStore("wishlist");
+  const request = store.get(id);
+
+  request.onsuccess = function () {
+    const movie = request.result;
+    movie.priority = priority;
+    store.put(movie).onsuccess = function () {
+      console.log("Prioridad actualizada con éxito");
+      loadWishlist();
     };
-}
-
-function deleteMovieFromWishlist(id) {
-    const transaction = db.transaction(["wishlist"], "readwrite");
-    const objectStore = transaction.objectStore("wishlist");
-    objectStore.delete(id);
+  };
 }
 
 const URL_PATH = "https://api.themoviedb.org";
 const API_KEY = "a8cf93c6f0b9e3d858ab64d82c2a51ab";
 
+const searchMovies = async () => {
+  const textSearch = document.getElementById("search-movie").value;
+  if (textSearch.length < 3) {
+    return;
+  }
 
-document.addEventListener("DOMContentLoaded", () => {
-    renderPopularMovies(1);
-    document.getElementById("searchInput").addEventListener("keyup", function () {
-        var searchValue = this.value.toLowerCase();
-        var tableRows = document.querySelectorAll("#moviesTable tbody tr");
+  const movies = await getMovies(textSearch);
 
-        // Desplazamiento automático hacia la tabla de películas
-        if (searchValue.length > 0) {
-            document.getElementById("moviesTable").scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-            });
-        }
+  let html = "";
+  movies.forEach((movie) => {
+    const { id, title, overview, poster_path } = movie;
+    const urlImage = `https://image.tmdb.org/t/p/w500${poster_path}`;
 
-        // Filtrado de las filas de la tabla según la búsqueda
-        tableRows.forEach(function (row) {
-            var titleText = row.cells[0].textContent.toLowerCase();
-            if (titleText.indexOf(searchValue) > -1) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        });
-    });
-});
-const getPopularMovies = async (page) => {
-    const moviesUrl = `${URL_PATH}/3/movie/popular?api_key=${API_KEY}&language=es-ES&page=${page}`;
-    return fetch(moviesUrl)
-        .then((response) => response.json())
-        .then((data) => {
-            return { movies: data.results, totalPages: data.total_pages };
-        });
+    html += `
+<div class="col-md-4 d-flex align-items-stretch">
+  <div class="card mb-4 shadow-sm flex-fill">
+    <div class="row no-gutters h-100">
+      <div class="col-md-4 d-flex align-items-center justify-content-center overflow-hidden">
+        <img src="${urlImage}" class="img-fluid" alt="${title}" style="max-height: 200px;">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">${title}</h5>
+          <p class="card-text">${overview.substr(0, 100)}...</p>
+          <button onclick='addToWishlist({id: "${id}", title: "${title.replace(
+      /'/g,
+      "\\'"
+    )}", watchNow: false})'
+                  class="btn btn-primary mt-auto">Añadir a lista de deseos</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+  });
+  document.getElementsByClassName("list-cards-search")[0].innerHTML = html;
 };
 
-function renderPagination(currentPage, totalPages) {
-    const paginationDiv = document.getElementById('pagination');
-    paginationDiv.innerHTML = ''; // Limpiar paginación existentes
+const getMovies = (textSerach) => {
+  const url = `${URL_PATH}/3/search/movie?api_key=${API_KEY}&language=es-ES&query=${textSerach}&page=1&include_adult=true`;
 
-    // las páginas que se mostrarán
-    let startPage = 1;
-    let endPage = Math.min(startPage + 3, totalPages); //  solo 3 páginas a partir de la página actual
-
-    for (let i = startPage; i <= endPage; i++) {
-        let button = document.createElement('button');
-        button.textContent = i;
-        button.classList.add('btn', 'btn-primary');
-        button.disabled = i === currentPage;
-        button.onclick = function () {
-            renderPopularMovies(i);
-        };
-
-        paginationDiv.appendChild(button);
-    }
-}
-
-
-const renderPopularMovies = async (page) => {
-    const { movies: apiMovies, totalPages } = await getPopularMovies(page);
-    const moviesTableBody = document.querySelector("#moviesTable tbody");
-
-    // Limpiar las celdas 
-    const rows = moviesTableBody.getElementsByTagName("tr");
-    while (rows.length > 0) {
-        rows[0].parentNode.removeChild(rows[0]);
-    }
-
-    apiMovies.forEach((movie) => {
-        let row = moviesTableBody.insertRow();
-
-        // Celdas para detalles de la película
-        row.insertCell().textContent = movie.title;
-        row.insertCell().textContent = movie.release_date;
-        row.insertCell().textContent = movie.vote_average.toFixed(1);
-
-        // agregar a la lista de deseos
-        let actionsCell = row.insertCell();
-        let wishlistButton = document.createElement("button");
-        wishlistButton.textContent = "Agregar a lista de deseos";
-        // estilos de Bootstrap al botón
-        wishlistButton.classList.add("btn", "btn-primary");
-        wishlistButton.onclick = function () {
-            addMovieToWishlist(movie);
-        };
-        actionsCell.appendChild(wishlistButton);
-    });
-
-    renderPagination(page, totalPages);
+  return fetch(url)
+    .then((response) => response.json())
+    .then((result) => result.results)
+    .catch((error) => console.log(error));
 };
-
-
-
-function loadAndRenderWishlist() {
-    const wishlistTableBody = document
-        .getElementById("wishlistTable")
-        .getElementsByTagName("tbody")[0];
-    wishlistTableBody.innerHTML = "";
-
-    getWishlistMovies((movies) => {
-        movies.forEach((movie) => {
-            let row = wishlistTableBody.insertRow();
-
-            // Título
-            row.insertCell().textContent = movie.title;
-
-            // Prioridad (Nueva columna)
-            let prioridadCell = row.insertCell();
-            prioridadCell.textContent = movie.prioridad;
-
-            // Acciones
-            let actionsCell = row.insertCell();
-            let deleteButton = document.createElement("button");
-            deleteButton.textContent = "Eliminar";
-            deleteButton.classList.add("btn", "btn-danger");
-            deleteButton.onclick = function () {
-                deleteMovieFromWishlist(movie.id);
-                row.remove();
-            };
-            actionsCell.appendChild(deleteButton);
-
-            // Botones de radio para actualizar prioridad
-            let radioCell = row.insertCell();
-            let radioAlta = document.createElement("input");
-            radioAlta.type = "radio";
-            radioAlta.name = "prioridadRadio_" + movie.id;
-            radioAlta.value = "Alta";
-            radioAlta.checked = movie.prioridad === "Alta";
-            radioAlta.onchange = function () {
-                updatePriorityInWishlist(movie.id, "Alta");
-            };
-            radioCell.appendChild(radioAlta);
-            radioCell.appendChild(document.createTextNode(" Alta "));
-
-            let radioBaja = document.createElement("input");
-            radioBaja.type = "radio";
-            radioBaja.name = "prioridadRadio_" + movie.id;
-            radioBaja.value = "Baja";
-            radioBaja.checked = movie.prioridad === "Baja";
-            radioBaja.onchange = function () {
-                updatePriorityInWishlist(movie.id, "Baja");
-            };
-            radioCell.appendChild(radioBaja);
-            radioCell.appendChild(document.createTextNode(" Baja"));
-        });
-    });
-}
-
-
-document.getElementById("showWishlist").addEventListener("click", () => {
-    const wishlistModal = document.getElementById("wishlistModal");
-    wishlistModal.style.display = "block";
-    loadAndRenderWishlist();
+document.addEventListener("DOMContentLoaded", function () {
+  initDb();
 });
-
-// CODIGO PARA EL SPINNER
-
-document.getElementById("showWishlist").addEventListener("click", function () {
-    var spinner = this.querySelector('.spinner-border');
-    spinner.classList.remove('d-none');
-
-    setTimeout(function () {
-        spinner.classList.add('d-none');
-        $('#wishlistModal').modal('show');
-    }, 2000);
-});
-
-// Ocultar el spinner cuando el modal se cierra
-$('#wishlistModal').on('hidden.bs.modal', function () {
-    var spinner = document.querySelector('#showWishlist .spinner-border');
-    spinner.classList.add('d-none');
-});
-
-// Después de cargar y renderizar la lista de deseos
-document.getElementById("updateAllPrioritiesBtn").addEventListener("click", function () {
-    if (nuevaPrioridad) {
-        getWishlistMovies((movies) => {
-            movies.forEach((movie) => {
-                updatePriorityInWishlist(movie.id, nuevaPrioridad);
-            });
-
-            // Vuelve a cargar y renderizar la lista de deseos
-            loadAndRenderWishlist();
-        });
-    }
-});
-
-document.getElementById("updatePriorityBtn").addEventListener("click", function () {
-    updatePrioritiesInWishlist();
-});
-
-// FUNCION PARA NIVEL PRIORIDAD
-function updatePrioritiesInWishlist() {
-    const rows = document.querySelectorAll("#wishlistTable tbody tr");
-
-    rows.forEach((row) => {
-        const movieId = row.dataset.movieId;
-        const radioAlta = row.querySelector("input[type='radio'][value='Alta']");
-        const radioBaja = row.querySelector("input[type='radio'][value='Baja']");
-
-        if (radioAlta && radioBaja) {
-            const newPriority = radioAlta.checked ? "Alta" : "Baja";
-            updatePriorityInWishlist(movieId, newPriority);
-        }
-    });
-
-    // Vuelve a cargar y renderizar la lista de deseos
-    loadAndRenderWishlist();
-}
