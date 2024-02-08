@@ -9,34 +9,35 @@ export const getPopularMovies = async (page) => {
   const moviesUrl = `${URL_PATH}/3/movie/popular?api_key=${API_KEY}&language=es-ES&page=${page}`;
 
   const [moviesResponse] = await Promise.all([
-    fetch(moviesUrl).then(response => response.json())
+    fetch(moviesUrl).then((response) => response.json()),
   ]);
 
   // Combine movie data with genres
-  const moviesWithGenres = moviesResponse.results.map(async movie => {
+  const moviesWithGenres = moviesResponse.results.map(async (movie) => {
     const genresUrl = `${URL_PATH}/3/movie/${movie.id}?api_key=${API_KEY}&language=es-ES`;
     const videosUrl = `${URL_PATH}/3/movie/${movie.id}/videos?api_key=${API_KEY}&language=en-US`;
 
     const [genresResponse, videosResponse] = await Promise.all([
-      fetch(genresUrl).then(response => response.json()),
-      fetch(videosUrl).then(response => response.json())
+      fetch(genresUrl).then((response) => response.json()),
+      fetch(videosUrl).then((response) => response.json()),
     ]);
 
     const genresMap = {};
-    genresResponse.genres.forEach(genre => {
+    genresResponse.genres.forEach((genre) => {
       genresMap[genre.id] = genre.name;
     });
 
     return {
       ...movie,
-      genres: movie.genre_ids.map(genreId => genresMap[genreId] || 'NOT FOUND'),
-      videos: videosResponse.results
+      genres: movie.genre_ids.map(
+        (genreId) => genresMap[genreId] || "NOT FOUND"
+      ),
+      videos: videosResponse.results,
     };
   });
 
   return Promise.all(moviesWithGenres);
 };
-
 
 export const renderPopularMovies = async (page) => {
   const movies = await getPopularMovies(page);
@@ -44,10 +45,22 @@ export const renderPopularMovies = async (page) => {
   let html = "";
   for (let index = 0; index < 8; index++) {
     const movie = movies[index];
-    const { id, title, poster_path, overview, release_date, genres, vote_average, videos } = movie;
+    const {
+      id,
+      title,
+      poster_path,
+      overview,
+      release_date,
+      genres,
+      vote_average,
+      videos,
+    } = movie;
     const urlImage = `https://image.tmdb.org/t/p/w500${poster_path}`;
     const urlMoreInfo = `../pelis.html?id=${id}`;
-    const trailerLink = videos.length > 0 ? `https://www.youtube.com/watch?v=${videos[0].key}` : '#';
+    const trailerLink =
+      videos.length > 0
+        ? `https://www.youtube.com/watch?v=${videos[0].key}`
+        : "#";
 
     html += `
       <div class="col-md-3 col-sm-6 col-12 mb-4">
@@ -55,7 +68,7 @@ export const renderPopularMovies = async (page) => {
           <img src="${urlImage}" class="card-img-top img-fluid" style="object-fit: cover;" alt="${title}">
           <div class="card-body d-flex flex-column">
             <h5 class="card-title text-center m-0">${title}</h5>
-            <button type="button" class="btn btn-primary mt-auto" data-bs-toggle="modal" data-bs-target="#movieModal${index}">
+            <button type="button" class="btn btn-secondary mt-auto" data-bs-toggle="modal" data-bs-target="#movieModal${index}">
               Ver detalles
             </button>
           </div>
@@ -71,7 +84,7 @@ export const renderPopularMovies = async (page) => {
               <div class="modal-body">
                 <p>${overview}</p>
                 <p>Fecha de lanzamiento: ${release_date}</p>
-                <p>Géneros: ${genres.join(', ')}</p>
+                <p>Géneros: ${genres.join(", ")}</p>
                 <p>Nota: ${vote_average.toFixed(1)}</p>
               </div>
               <div class="modal-footer">
