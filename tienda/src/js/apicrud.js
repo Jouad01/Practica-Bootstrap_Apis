@@ -126,7 +126,10 @@ const API_KEY = "a8cf93c6f0b9e3d858ab64d82c2a51ab";
 
 const searchMovies = async () => {
   const textSearch = document.getElementById("search-movie").value;
+
+  // Limpia las tarjetas existentes si el texto de búsqueda es menos de 3 caracteres
   if (textSearch.length < 3) {
+    document.getElementsByClassName("list-cards-search")[0].innerHTML = "";
     return;
   }
 
@@ -138,27 +141,27 @@ const searchMovies = async () => {
     const urlImage = `https://image.tmdb.org/t/p/w500${poster_path}`;
 
     html += `
-<div class="col-md-4 d-flex align-items-stretch">
-  <div class="card mb-4 shadow-sm flex-fill">
-    <div class="row no-gutters h-100">
-      <div class="col-md-4 d-flex align-items-center justify-content-center overflow-hidden">
-        <img src="${urlImage}" class="img-fluid" alt="${title}" style="max-height: 200px;">
-      </div>
-      <div class="col-md-8">
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title">${title}</h5>
-          <p class="card-text">${overview.substr(0, 100)}...</p>
-          <button onclick='addToWishlist({id: "${id}", title: "${title.replace(
+  <div class="col-md-4 d-flex align-items-stretch">
+    <div class="card mb-4 shadow-sm flex-fill">
+      <div class="row no-gutters h-100">
+        <div class="col-md-4 d-flex align-items-center justify-content-center overflow-hidden">
+          <img src="${urlImage}" class="img-fluid" alt="${title}" style="max-height: 200px;">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">${title}</h5>
+            <p class="card-text">${overview.substr(0, 100)}...</p>
+            <button onclick='addToWishlist({id: "${id}", title: "${title.replace(
       /'/g,
       "\\'"
     )}", watchNow: false})'
-                  class="btn btn-primary mt-auto">Añadir a lista de deseos</button>
+                    class="btn btn-primary mt-auto">Añadir a lista de deseos</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-`;
+  `;
   });
   document.getElementsByClassName("list-cards-search")[0].innerHTML = html;
 };
