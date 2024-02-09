@@ -14,10 +14,8 @@ export function initDb() {
   request.onupgradeneeded = function (event) {
     db = event.target.result;
     if (!db.objectStoreNames.contains("wishlist")) {
-      const objectStore = db.createObjectStore("wishlist", {
-        keyPath: "id",
-      });
-      objectStore.createIndex("watchNow", "watchNow", { unique: false });
+      const objectStore = db.createObjectStore("wishlist", { keyPath: "id" });
+      objectStore.createIndex("priority", "priority", { unique: false }); // Cambio aquí
     }
   };
 
@@ -44,17 +42,17 @@ export function removeFromWishlist(id) {
   };
 }
 
-export function updateMoviePriority(id, watchNow) {
+export function updateMoviePriority(id, priority) {
   const transaction = db.transaction(["wishlist"], "readwrite");
   const store = transaction.objectStore("wishlist");
   const request = store.get(id);
 
   request.onsuccess = function () {
     const movie = request.result;
-    movie.watchNow = watchNow;
+    movie.priority = priority;
     store.put(movie).onsuccess = function () {
       console.log("Prioridad de visualización actualizada");
-      loadWishlist(); // Recargar la lista para reflejar el cambio
+      loadWishlist();
     };
   };
 }
