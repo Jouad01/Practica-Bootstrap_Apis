@@ -15,7 +15,7 @@ export function initDb() {
     db = event.target.result;
     if (!db.objectStoreNames.contains("wishlist")) {
       const objectStore = db.createObjectStore("wishlist", { keyPath: "id" });
-      objectStore.createIndex("priority", "priority", { unique: false }); // Cambio aquí
+      objectStore.createIndex("priority", "priority", { unique: false });
     }
   };
 
@@ -30,13 +30,12 @@ export function addToWishlist(movie) {
   const store = transaction.objectStore("wishlist");
 
   store.add(movie).onsuccess = function () {
-    // Selecciona o crea el contenedor de la alerta
     let alertContainer = document.getElementById("alert-container");
     if (!alertContainer) {
       alertContainer = document.createElement("div");
       alertContainer.id = "alert-container";
       alertContainer.style.position = "fixed";
-      alertContainer.style.top = "20px"; // Cambia 'bottom' por 'top' para moverlo hacia la parte superior de la pantalla
+      alertContainer.style.top = "20px";
       alertContainer.style.left = "50%";
       alertContainer.style.transform = "translateX(-50%)";
       alertContainer.style.zIndex = "9999";
@@ -51,11 +50,6 @@ export function addToWishlist(movie) {
     `;
 
     alertContainer.innerHTML = alertHTML;
-
-    // Opcional: elimina la alerta después de 5 segundos
-    setTimeout(() => {
-      alertContainer.removeChild(alertContainer.firstChild);
-    }, 2000);
 
     loadWishlist();
   };
@@ -96,11 +90,9 @@ export function loadWishlist() {
     request.result.forEach((movie) => {
       const row = wishlistTable.insertRow();
 
-      // Celda para el título
       const titleCell = row.insertCell(0);
       titleCell.textContent = movie.title;
 
-      // Celda para el nivel de prioridad
       const priorityCell = row.insertCell(1);
       const prioritySelect = document.createElement("select");
       prioritySelect.innerHTML = `
@@ -115,7 +107,6 @@ export function loadWishlist() {
         updateMoviePriority(movie.id, prioritySelect.value);
       priorityCell.appendChild(prioritySelect);
 
-      // Celda para las acciones
       const actionsCell = row.insertCell(2);
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "Eliminar";
