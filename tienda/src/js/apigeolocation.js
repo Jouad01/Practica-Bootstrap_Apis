@@ -10,9 +10,9 @@ window.showSpinnerAndOpenModal = function () {
   setTimeout(() => {
     spinnerIcon.classList.add("d-none");
     btnOpenModal.disabled = false;
-    $('#locationModal').modal('show');
+    $("#locationModal").modal("show");
     initMap();
-  }, 2000);
+  }, 500);
 };
 
 function initMap() {
@@ -23,11 +23,16 @@ function initMap() {
   infoWindow = new google.maps.InfoWindow();
 
   const locationButton = document.createElement("button");
-  locationButton.textContent = "Obtener ubicación";
+  locationButton.innerHTML = `Obtener ubicación <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>`;
   locationButton.classList.add("btn", "btn-primary", "btn-sm", "mt-3", "ms-5");
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
 
+  const spinnerIcon = locationButton.querySelector("span.spinner-border");
+
   locationButton.addEventListener("click", () => {
+    spinnerIcon.classList.remove("d-none");
+    locationButton.disabled = true;
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -36,34 +41,49 @@ function initMap() {
             lng: position.coords.longitude,
           };
 
-          infoWindow.setPosition(pos);
-          infoWindow.setContent("Location found.");
-          infoWindow.open(map);
-          map.setCenter(pos);
-
-          // Dibuja un círculo alrededor de la ubicación actual
-          const circle = new google.maps.Circle({
-            strokeColor: "#FFFF00",
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: "#FFFF00",
-            fillOpacity: 0.35,
-            map,
-            center: pos,
-            radius: position.coords.accuracy,
-          });
-
           const geocoder = new google.maps.Geocoder();
-          geocodeLatLng(geocoder, map, infoWindow, pos);
+          geocoder.geocode({ location: pos }, (results, status) => {
+            if (status === "OK" && results[0]) {
+              infoWindow.setPosition(pos);
+              infoWindow.setContent(results[0].formatted_address);
+              infoWindow.open(map);
+            } else {
+              infoWindow.setPosition(pos);
+              infoWindow.setContent(
+                "No se pudo obtener la dirección de esta ubicación."
+              );
+              infoWindow.open(map);
+            }
+            map.setCenter(pos);
+
+            new google.maps.Circle({
+              strokeColor: "#FFFF00",
+              strokeOpacity: 0.8,
+              strokeWeight: 2,
+              fillColor: "#FFFF00",
+              fillOpacity: 0.35,
+              map,
+              center: pos,
+              radius: position.coords.accuracy,
+            });
+
+            // Ocultar el spinner y habilitar el botón después de obtener la ubicación y la dirección
+            spinnerIcon.classList.add("d-none");
+            locationButton.disabled = false;
+          });
 
           saveLocation(pos); // Guarda la última ubicación
         },
         () => {
           handleLocationError(true, infoWindow, map.getCenter());
+          spinnerIcon.classList.add("d-none");
+          locationButton.disabled = false;
         }
       );
     } else {
       handleLocationError(false, infoWindow, map.getCenter());
+      spinnerIcon.classList.add("d-none");
+      locationButton.disabled = false;
     }
   });
 }
@@ -126,4 +146,3 @@ export {
   openModal,
   closeModal,
 };
-

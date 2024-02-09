@@ -37,3 +37,26 @@ function resetDragAndDrop() {
     originalContainer.appendChild(dragItem);
   }
 }
+
+// Función para la barra de navegación
+
+document.addEventListener("DOMContentLoaded", function () {
+  var navLinks = document.querySelectorAll(".navbar-nav .nav-item .nav-link");
+  function adjustNavLinkStyles() {
+    navLinks.forEach((link) => {
+      link.classList.remove("active");
+      link.classList.replace("text-white", "text-dark");
+    });
+  }
+  navLinks.forEach(function (link) {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      adjustNavLinkStyles();
+
+      this.classList.add("active");
+      this.classList.replace("text-dark", "text-white");
+
+      location.href = this.href;
+    });
+  });
+});

@@ -20,7 +20,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand text-dark" href="#"><img src="./assets/logo.png" alt="Logo"
+      <a class="navbar-brand text-dark"><img src="./assets/logo.png" alt="Logo"
           class="d-inline-block align-text-top" style="width: 70px; height: auto" /></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +32,7 @@
             <a class="nav-link active text-white" aria-current="page" href="#">Inicio</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" href="#">Populares</a>
+            <a class="nav-link text-dark" href="#populares">Populares</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-dark" href="#nosotros">Nosotros</a>
@@ -111,9 +111,9 @@
   </div>
 
   <!-- CONTENEDOR PELICULAS -->
-  <div class="container mt-5">
+  <div class="container mt-5" id="populares">
     <h1 class="text-center mb-5 text-warning" id="popularMoviesTitle">
-      Lo Más Popular Hasta El Momento
+      Lo más  popular hasta el momento
     </h1>
     <div class="row list-cards"></div>
     <nav aria-label="Page navigation example">
@@ -148,11 +148,14 @@
   <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         <div class="modal-header">
-          <h5 class="modal-title" id="modalLabel">
-            Comprobación de seguridad
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          
+          <div class="modal-title" id="modalLabel">
+            <h5>Comprobación de seguridad</h5>
+            <p>Para continuar, por favor completa la siguiente acción de seguridad:</p>
+            <p><strong>Instrucción:</strong> Arrastra el cuadrado azul al campo que se encuentra a la derecha.</p>
+          </div>
         </div>
         <div class="modal-body">
           <div id="images">
