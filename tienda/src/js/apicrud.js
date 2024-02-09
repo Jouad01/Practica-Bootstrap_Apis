@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initDb();
 });
 
-function initDb() {
+export function initDb() {
   const request = window.indexedDB.open("MoviesDB", 1);
 
   request.onerror = function (event) {
@@ -27,7 +27,7 @@ function initDb() {
   };
 }
 
-function addToWishlist(movie) {
+export function addToWishlist(movie) {
   const transaction = db.transaction(["wishlist"], "readwrite");
   const store = transaction.objectStore("wishlist");
   store.add(movie).onsuccess = function () {
@@ -36,7 +36,7 @@ function addToWishlist(movie) {
   };
 }
 
-function removeFromWishlist(id) {
+export function removeFromWishlist(id) {
   const transaction = db.transaction(["wishlist"], "readwrite");
   const store = transaction.objectStore("wishlist");
   store.delete(id).onsuccess = function () {
@@ -44,7 +44,7 @@ function removeFromWishlist(id) {
   };
 }
 
-function updateMoviePriority(id, watchNow) {
+export function updateMoviePriority(id, watchNow) {
   const transaction = db.transaction(["wishlist"], "readwrite");
   const store = transaction.objectStore("wishlist");
   const request = store.get(id);
@@ -59,7 +59,7 @@ function updateMoviePriority(id, watchNow) {
   };
 }
 
-function loadWishlist() {
+export function loadWishlist() {
   const transaction = db.transaction(["wishlist"], "readonly");
   const store = transaction.objectStore("wishlist");
   const request = store.getAll();
@@ -79,10 +79,15 @@ function loadWishlist() {
       const priorityCell = row.insertCell(1);
       const prioritySelect = document.createElement("select");
       prioritySelect.innerHTML = `
-        <option value="Alta" ${movie.priority === "Alta" ? "selected" : ""}>Alta</option>
-        <option value="Baja" ${movie.priority === "Baja" ? "selected" : ""}>Baja</option>
+        <option value="Alta" ${
+          movie.priority === "Alta" ? "selected" : ""
+        }>Alta</option>
+        <option value="Baja" ${
+          movie.priority === "Baja" ? "selected" : ""
+        }>Baja</option>
       `;
-      prioritySelect.onchange = () => updateMoviePriority(movie.id, prioritySelect.value);
+      prioritySelect.onchange = () =>
+        updateMoviePriority(movie.id, prioritySelect.value);
       priorityCell.appendChild(prioritySelect);
 
       // Celda para las acciones
@@ -96,31 +101,12 @@ function loadWishlist() {
   };
 }
 
-
-
-
-function updateMoviePriority(id, priority) {
-  const transaction = db.transaction(["wishlist"], "readwrite");
-  const store = transaction.objectStore("wishlist");
-  const request = store.get(id);
-
-  request.onsuccess = function () {
-    const movie = request.result;
-    movie.priority = priority;
-    store.put(movie).onsuccess = function () {
-      console.log("Prioridad actualizada con éxito");
-      loadWishlist();
-    };
-  };
-}
-
 const URL_PATH = "https://api.themoviedb.org";
 const API_KEY = "a8cf93c6f0b9e3d858ab64d82c2a51ab";
 
-const searchMovies = async () => {
+export const searchMovies = async () => {
   const textSearch = document.getElementById("search-movie").value;
 
-  // Limpia las tarjetas existentes si el texto de búsqueda es menos de 3 caracteres
   if (textSearch.length < 3) {
     document.getElementsByClassName("list-cards-search")[0].innerHTML = "";
     return;
@@ -134,32 +120,48 @@ const searchMovies = async () => {
     const urlImage = `https://image.tmdb.org/t/p/w500${poster_path}`;
 
     html += `
-  <div class="col-md-4 d-flex align-items-stretch">
-    <div class="card mb-4 shadow-sm flex-fill">
-      <div class="row no-gutters h-100">
-        <div class="col-md-4 d-flex align-items-center justify-content-center overflow-hidden">
-          <img src="${urlImage}" class="img-fluid" alt="${title}" style="max-height: 200px;">
-        </div>
-        <div class="col-md-8">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">${title}</h5>
-            <p class="card-text">${overview.substr(0, 100)}...</p>
-            <button onclick='addToWishlist({id: "${id}", title: "${title.replace(
-      /'/g,
-      "\\'"
-    )}", watchNow: false})'
-                    class="btn btn-primary mt-auto">Añadir a lista de deseos</button>
+      <div class="col-md-4 d-flex align-items-stretch">
+        <div class="card mb-4 shadow-sm flex-fill">
+          <div class="row no-gutters h-100">
+            <div class="col-md-4 d-flex align-items-center justify-content-center overflow-hidden">
+              <img src="${urlImage}" class="img-fluid" alt="${title}" style="max-height: 200px;">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">${title}</h5>
+                <p class="card-text">${overview.substr(0, 100)}...</p>
+                <button data-id="${id}" data-title="${title}" class="btn btn-primary mt-auto add-to-wishlist">Añadir a lista de deseos</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  `;
+    `;
   });
-  document.getElementsByClassName("list-cards-search")[0].innerHTML = html;
+
+  const container = document.getElementsByClassName("list-cards-search")[0];
+  container.innerHTML = html;
+
+  addEventListenersToButtons();
 };
 
-const getMovies = (textSerach) => {
+export function addEventListenersToButtons() {
+  document.querySelectorAll(".add-to-wishlist").forEach((button) => {
+    button.addEventListener("click", function () {
+      const id = this.getAttribute("data-id");
+      const title = this.getAttribute("data-title");
+      addToWishlist({ id, title, watchNow: false })
+        .then(() => {
+          console.log("Película añadida a la lista de deseos");
+        })
+        .catch((error) => {
+          console.error("Error añadiendo película a la lista de deseos", error);
+        });
+    });
+  });
+}
+
+export const getMovies = (textSerach) => {
   const url = `${URL_PATH}/3/search/movie?api_key=${API_KEY}&language=es-ES&query=${textSerach}&page=1&include_adult=true`;
 
   return fetch(url)
