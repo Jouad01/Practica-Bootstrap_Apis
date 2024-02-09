@@ -28,8 +28,35 @@ export function initDb() {
 export function addToWishlist(movie) {
   const transaction = db.transaction(["wishlist"], "readwrite");
   const store = transaction.objectStore("wishlist");
+
   store.add(movie).onsuccess = function () {
-    console.log("Película añadida a la lista de deseos");
+    // Selecciona o crea el contenedor de la alerta
+    let alertContainer = document.getElementById("alert-container");
+    if (!alertContainer) {
+      alertContainer = document.createElement("div");
+      alertContainer.id = "alert-container";
+      alertContainer.style.position = "fixed";
+      alertContainer.style.top = "20px"; // Cambia 'bottom' por 'top' para moverlo hacia la parte superior de la pantalla
+      alertContainer.style.left = "50%";
+      alertContainer.style.transform = "translateX(-50%)";
+      alertContainer.style.zIndex = "9999";
+      document.body.appendChild(alertContainer);
+    }
+
+    const alertHTML = `
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Película añadida a la lista de deseos
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    `;
+
+    alertContainer.innerHTML = alertHTML;
+
+    // Opcional: elimina la alerta después de 5 segundos
+    setTimeout(() => {
+      alertContainer.removeChild(alertContainer.firstChild);
+    }, 2000);
+
     loadWishlist();
   };
 }
