@@ -1,5 +1,5 @@
 let map, infoWindow;
-let lastLocation = null; // Variable para almacenar la última ubicación
+let lastLocation = null; // Variable para almacenar la ultima ubicación
 
 // FUNCION PARA MOSTRAR EL SPINNER Y ABRIR EL MODAL
 window.showSpinnerAndOpenModal = function () {
@@ -67,12 +67,12 @@ function initMap() {
               radius: position.coords.accuracy,
             });
 
-            // Ocultar el spinner y habilitar el botón después de obtener la ubicación y la dirección
+            // Ocultar el spinner y habilitar después de obtener la ubicación y la dirección
             spinnerIcon.classList.add("d-none");
             locationButton.disabled = false;
           });
 
-          saveLocation(pos); // Guarda la última ubicación
+          saveLocation(pos); 
         },
         () => {
           handleLocationError(true, infoWindow, map.getCenter());
@@ -90,8 +90,8 @@ function initMap() {
 
 function openModal() {
   const modal = document.getElementById("locationModal");
-  modal.style.display = "block"; // Muestra el modal
-  initMap(); // Inicializa o actualiza el mapa
+  modal.style.display = "block"; // muestra el modal
+  initMap(); 
 }
 
 function closeModal() {
@@ -102,13 +102,14 @@ function closeModal() {
 document.addEventListener("DOMContentLoaded", (event) => {
   const modalElement = document.getElementById("locationModal");
   modalElement.addEventListener("shown.bs.modal", function (event) {
-    initMap(); // Inicializa o actualiza el mapa cuando el modal se muestra
+    initMap(); 
   });
 });
 
 function saveLocation(pos) {
-  lastLocation = pos; // Guarda la última ubicación
-  localStorage.setItem("lastLocation", JSON.stringify(lastLocation)); // Guarda en localStorage
+  lastLocation = pos;  
+  // Guarda en localStorage
+  localStorage.setItem("lastLocation", JSON.stringify(lastLocation)); 
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {

@@ -6,8 +6,7 @@ export function drag(ev) {
   ev.dataTransfer.setData("text", ev.target.id);
 }
 
-export let currentTrailerUrl = "";
-
+// Al cargar el dom asigna la URL al clicar
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".trailer-button").forEach((button) => {
     button.addEventListener("click", function () {
@@ -16,11 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// suelta el elemento arrastrado
 export function drop(ev) {
   ev.preventDefault();
   var data = ev.dataTransfer.getData("text");
   ev.target.appendChild(document.getElementById(data));
 
+  // Cierra el modal y abre la del tráilerr
   const miModal = document.getElementById("miModal");
   if (miModal) {
     miModal.classList.remove("show");
@@ -37,11 +38,9 @@ export function drop(ev) {
 
   if (currentTrailerUrl) {
     const trailerWindow = window.open(currentTrailerUrl, "_blank");
-
     window.focus();
-
     currentTrailerUrl = "";
-
+    // reinicia la funcionalidad de arrastrar
     resetDragAndDrop();
   }
 }

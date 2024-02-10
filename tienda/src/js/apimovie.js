@@ -12,7 +12,6 @@ export const getPopularMovies = async (page) => {
     fetch(moviesUrl).then((response) => response.json()),
   ]);
 
-  // Combine movie data with genres
   const moviesWithGenres = moviesResponse.results.map(async (movie) => {
     const genresUrl = `${URL_PATH}/3/movie/${movie.id}?api_key=${API_KEY}&language=es-ES`;
     const videosUrl = `${URL_PATH}/3/movie/${movie.id}/videos?api_key=${API_KEY}&language=en-US`;
