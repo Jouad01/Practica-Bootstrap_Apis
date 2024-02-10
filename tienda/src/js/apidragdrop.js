@@ -6,6 +6,7 @@ export function drag(ev) {
   ev.dataTransfer.setData("text", ev.target.id);
 }
 
+export let currentTrailerUrl = "";
 // Al cargar el dom asigna la URL al clicar
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".trailer-button").forEach((button) => {
