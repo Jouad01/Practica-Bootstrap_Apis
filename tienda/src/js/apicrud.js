@@ -26,34 +26,44 @@ export function initDb() {
 }
 
 export function addToWishlist(movie) {
-  const transaction = db.transaction(["wishlist"], "readwrite");
-  const store = transaction.objectStore("wishlist");
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(["wishlist"], "readwrite");
+    const store = transaction.objectStore("wishlist");
 
-  store.add(movie).onsuccess = function () {
-    let alertContainer = document.getElementById("alert-container");
-    if (!alertContainer) {
-      alertContainer = document.createElement("div");
-      alertContainer.id = "alert-container";
-      alertContainer.style.position = "fixed";
-      alertContainer.style.top = "20px";
-      alertContainer.style.left = "50%";
-      alertContainer.style.transform = "translateX(-50%)";
-      alertContainer.style.zIndex = "9999";
-      document.body.appendChild(alertContainer);
-    }
+    const request = store.add(movie);
 
-    const alertHTML = `
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        Película añadida a la lista de deseos
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    `;
+    request.onsuccess = function () {
+      let alertContainer = document.getElementById("alert-container");
+      if (!alertContainer) {
+        alertContainer = document.createElement("div");
+        alertContainer.id = "alert-container";
+        alertContainer.style.position = "fixed";
+        alertContainer.style.top = "20px";
+        alertContainer.style.left = "50%";
+        alertContainer.style.transform = "translateX(-50%)";
+        alertContainer.style.zIndex = "9999";
+        document.body.appendChild(alertContainer);
+      }
 
-    alertContainer.innerHTML = alertHTML;
+      const alertHTML = `
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          Película añadida a la lista de deseos
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
 
-    loadWishlist();
-  };
+      alertContainer.innerHTML = alertHTML;
+
+      loadWishlist();
+      resolve(); 
+    };
+
+    request.onerror = function (event) {
+      reject(event.target.error); 
+    };
+  });
 }
+
 
 export function removeFromWishlist(id) {
   const transaction = db.transaction(["wishlist"], "readwrite");

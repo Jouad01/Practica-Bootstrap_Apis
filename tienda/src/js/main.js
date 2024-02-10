@@ -43,15 +43,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  initializeDragDrop();
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//   initializeDragDrop();
+// });
 
 import { initializeNavBar } from "./navbar";
 
 document.addEventListener("DOMContentLoaded", function () {
   initializeNavBar();
-  initializeTrailerButtons();
+  // initializeTrailerButtons();
 });
 
 import {
